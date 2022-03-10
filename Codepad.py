@@ -104,6 +104,7 @@ for i in color_dict:
 toolbar = ttk.Label(main_app)
 toolbar.pack(side = tk.TOP,fill = tk.X)
 
+## Font box
 fonts = tk.font.families();
 font_family = tk.StringVar();
 font_box = ttk.Combobox(toolbar,width = 30,textvariable = font_family,state="readonly");
@@ -111,6 +112,65 @@ font_box['values'] = fonts
 font_box.current(fonts.index("Arial"))
 font_box.grid(row = 0,column = 0 ,padx = 5)
 
+## Size box
+size = tk.IntVar();
+size_box = ttk.Combobox(toolbar,width = 14,textvariable = size,state="readonly")
+size_box['values'] = tuple(range(8,81))
+size_box.current(4)
+size_box.grid(row = 0,column = 1,padx = 5)
+## Bold Button
+bold_icon = tk.PhotoImage(file = "icons2/bold.png")
+bold_btn = ttk.Button(toolbar,image = bold_icon)
+bold_btn.grid(row = 0,column = 2,padx = 5)
+## Italic Button
+italic_icon = tk.PhotoImage(file = "icons2/italic.png")
+italic_btn = ttk.Button(toolbar,image = italic_icon)
+italic_btn.grid(row = 0,column = 3,padx = 5)
+## Underline icon
+underline_icon = tk.PhotoImage(file = "icons2/underline.png")
+underline_btn = ttk.Button(toolbar,image = underline_icon)
+underline_btn.grid(row = 0,column = 4,padx = 5)
+## Font Color Button
+font_color_icon = tk.PhotoImage(file = "icons2/font_color.png")
+font_color_btn = ttk.Button(toolbar,image = font_color_icon)
+font_color_btn.grid(row = 0,column = 5,padx = 5)
+## Aligne Left Button
+align_left_icon = tk.PhotoImage(file = "icons2/align_left.png")
+align_left_btn = ttk.Button(toolbar,image = align_left_icon)
+align_left_btn.grid(row = 0,column = 6 , padx = 5)
+## Aligne Center Button
+align_center_icon = tk.PhotoImage(file = "icons2/align_center.png")
+align_center_btn = ttk.Button(toolbar,image = align_center_icon)
+align_center_btn.grid(row = 0,column = 7 , padx = 5)
+## Aligne Right Button
+align_right_icon = tk.PhotoImage(file = "icons2/align_right.png")
+align_right_btn = ttk.Button(toolbar,image = align_right_icon)
+align_right_btn.grid(row = 0,column = 8 , padx = 5)
 
+######################################################################################################
+#                                         Toolbar End                                                #           
+######################################################################################################
+
+######################################################################################################
+#                                         Toolbar End                                                #           
+######################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################################################################################################
+#                                                                                                    #           
+######################################################################################################
 main_app.config(menu = main_menu)
 main_app.mainloop()
