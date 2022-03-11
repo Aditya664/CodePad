@@ -152,28 +152,6 @@ align_right_btn.grid(row = 0,column = 8 , padx = 5)
 ######################################################################################################
 
 ######################################################################################################
-#                                         Toolbar Funct                                              #           
-######################################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######################################################################################################
-#                                                                                                    #           
-######################################################################################################
-
-######################################################################################################
 #                                          Text Editor start                                         #           
 ######################################################################################################
 
@@ -188,12 +166,114 @@ scroll_bar.config(command = text_editor.yview)
 text_editor.config(yscrollcommand = scroll_bar.set)
 
 ######################################################################################################
-#                                          Text Editor start                                         #           
+#                                          Text Editor End                                           #           
 ######################################################################################################
 
 ######################################################################################################
 #                                          Text Editor funct                                         #           
 ######################################################################################################
+
+## Font and size funct
+current_font_family = "Arial"
+current_font_size = 12
+
+## Change Font
+def change_font(main_app):
+    global current_font_family
+    current_font_family = font_family.get()
+    text_editor.configure(font = (current_font_family,current_font_size))
+## Change size
+def change_size(main_app):
+    global current_font_size
+    current_font_size = size.get()
+    text_editor.configure(font = (current_font_family,current_font_size))
+## Buttons functionality
+
+#### Bold Butons functionality
+
+def change_bold():
+   text_property = tk.font.Font(font = text_editor['font'])
+   if text_property.actual()['weight'] == 'normal':
+       text_editor.configure(font = (current_font_family,current_font_size,'bold'))
+
+   if text_property.actual()['weight'] == 'bold':
+       text_editor.configure(font = (current_font_family,current_font_size,'normal'))
+    
+bold_btn.configure(command=change_bold)
+#### Italic Butons functionality
+
+def change_italic():
+   text_property = tk.font.Font(font = text_editor['font'])
+   if text_property.actual()['slant'] == 'roman':
+       text_editor.configure(font = (current_font_family,current_font_size,'italic'))
+
+   if text_property.actual()['slant'] == 'italic':
+       text_editor.configure(font = (current_font_family,current_font_size,'roman'))
+
+italic_btn.configure(command = change_italic)
+
+#### Underline Butons functionality
+
+def change_under():
+   text_property = tk.font.Font(font = text_editor['font'])
+   if text_property.actual()['underline'] == 0:
+       text_editor.configure(font = (current_font_family,current_font_size,"underline"))
+
+   if text_property.actual()['underline'] == 1:
+       text_editor.configure(font = (current_font_family,current_font_size,"normal"))
+underline_btn.configure(command =  change_under)
+
+## Font color functionality
+
+def change_font_color():
+    color_var = tk.colorchooser.askcolor()
+    text_editor.configure(fg = color_var[1])
+
+font_color_btn.configure(command = change_font_color)
+
+## Align Functionality
+
+def aline_left():
+    text_content = text_editor.get(1.0,'end')
+    text_editor.tag_config('left',justify=tk.LEFT)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'left')
+
+align_left_btn.configure(command = aline_left)
+
+def aline_center():
+    text_content = text_editor.get(1.0,'end')
+    text_editor.tag_config('center',justify=tk.CENTER)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'center')
+
+align_center_btn.configure(command = aline_center)
+
+def aline_right():
+    text_content = text_editor.get(1.0,'end')
+    text_editor.tag_config('right',justify=tk.RIGHT)
+    text_editor.delete(1.0,'end')
+    text_editor.insert(tk.INSERT,text_content,'right')
+
+align_right_btn.configure(command = aline_right)
+
+size_box.bind("<<ComboboxSelected>>",change_size)
+font_box.bind("<<ComboboxSelected>>",change_font)
+text_editor.configure(font=(current_font_family, current_font_size))
+
+
+
+######################################################################################################
+#                                                                                                    #           
+######################################################################################################
+
+######################################################################################################
+#                                          Statusbar start                                           #           
+######################################################################################################
+
+status_bar = tk.Label(main_app,text="Status Bar")
+status_bar.pack(side=tk.BOTTOM)
+
 
 
 
