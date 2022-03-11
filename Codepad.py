@@ -6,7 +6,7 @@ import os
 
 main_app = tk.Tk()
 main_app.geometry('1200x800')
-main_app.title('Codepad text editor created by Aditya.')
+main_app.title('Codepad 1.0')
 ######################################################################################################
 #                                         Main menu Start                                            #            
 ######################################################################################################
@@ -70,14 +70,90 @@ main_menu.add_cascade(
 ######################################################################################################
 #                                         Main menu Funct                                            #            
 ######################################################################################################
+url = ''
+## new
+def new_file(event=None):
+    global url
+    url = ''
+    text_editor.delete(1.0,tk.END)
+
+## Open file
+
+def open_file(event=None):
+    global url
+    url = filedialog.askopenfilename(initialdir = os.getcwd(),title = 'Select File',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+    try:
+        with open(url,'r') as fr:
+            text_editor.delete(1.0,tk.END)
+            text_editor.insert(1.0,fr.read())
+
+    except FileNotFoundError:
+        return
+    except:
+        return
+    main_app.title(os.path.basename(url))
+
+## Save File 
+def save_file(event=None):
+    global url
+    try:
+        if url:
+            content = str(text_editor.get(1.0,tk.END))
+            with open(url,'w',encoding='utf-8') as fw:
+                fw.write(content)
+        else:
+            url = filedialog.asksaveasfile(mode = 'w',defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+            content = text_editor.get(1.0,tk.END)
+            url.write(content)
+            url.close()
+    except:
+        return
+
+## Save as 
+
+def save_as(event=None):
+    global url
+    try:
+        content = text_editor.get(1.0,tk.END)
+        url = filedialog.asksaveasfile(mode = 'w',defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+        url.write(content)
+        url.close()
+    except:
+        return
+
+## Exit 
+
+def exit_func(event=None):
+    global url,text_changed
+    try:
+        if text_changed:
+            mbox = messagebox.askyesnocancel('Warning','Do You want to save the file ???')
+            if mbox is True:
+                if url:
+                    content = text_editor.get(1.0,tk.END)
+                    with open(url, 'w',encoding='utf-8') as fw:
+                        fw.write(content)
+                        main_app.destroy()
+                else:
+                    content2 = text_editor.get(1.0,tk.END)
+                    url = filedialog.asksaveasfile(mode = 'w',defaultextension = '.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+                    url.write(content2)
+                    url.close()
+                    main_app.destroy()
+            elif mbox is False:
+                main_app.destroy()
+        else:
+            main_app.destroy();
+    except:
+        return
 
 
 ## File Commands
-file.add_command(label='New', image = new_icon,compound = tk.LEFT,accelerator = 'Ctrl+n')
-file.add_command(label='Open', image = open_icon,compound = tk.LEFT,accelerator = 'Ctrl+o')
-file.add_command(label='Save', image = save_icon,compound = tk.LEFT,accelerator = 'Ctrl+s')
-file.add_command(label='Save as', image = saveas_icon,compound = tk.LEFT,accelerator = 'Ctrl+Alt+s')
-file.add_command(label='Exit', image = exit_icon,compound = tk.LEFT,accelerator = 'Ctrl+e')
+file.add_command(label='New', image = new_icon,compound = tk.LEFT,accelerator = 'Ctrl+n',command=new_file)
+file.add_command(label='Open', image = open_icon,compound = tk.LEFT,accelerator = 'Ctrl+o',command=open_file)
+file.add_command(label='Save', image = save_icon,compound = tk.LEFT,accelerator = 'Ctrl+s',command=save_file)
+file.add_command(label='Save as', image = saveas_icon,compound = tk.LEFT,accelerator = 'Ctrl+Alt+s',command=save_as)
+file.add_command(label='Exit', image = exit_icon,compound = tk.LEFT,accelerator = 'Ctrl+e',command=exit_func)
 ## Edit Commands
 edit.add_command(label="Copy",image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+c')
 edit.add_command(label="Paste",image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+p')
@@ -274,6 +350,29 @@ text_editor.configure(font=(current_font_family, current_font_size))
 status_bar = tk.Label(main_app,text="Status Bar")
 status_bar.pack(side=tk.BOTTOM)
 
+
+
+
+
+######################################################################################################
+#                                                                                                    #           
+######################################################################################################
+
+######################################################################################################
+#                                          Statusbar funct                                           #           
+######################################################################################################
+text_changed = False
+def changed(event=None):
+    global text_changed
+    if text_editor.edit_modified():
+        text_changed = True
+        words =  len(text_editor.get(1.0,'end-1c').split())
+        character = len(text_editor.get(1.0,'end-1c').replace(' ',''))
+        status_bar.config(text = f'Characters : {character} Words : {words}')
+    text_editor.edit_modified(False)
+
+text_editor.bind("<<Modified>>",changed)
+      
 
 
 
