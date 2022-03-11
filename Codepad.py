@@ -5,7 +5,7 @@ import os
 
 
 main_app = tk.Tk()
-main_app.geometry('1200x800')
+main_app.geometry('1200x600')
 main_app.title('Codepad 1.0')
 ######################################################################################################
 #                                         Main menu Start                                            #            
@@ -147,6 +147,100 @@ def exit_func(event=None):
     except:
         return
 
+## Find
+def find_func(event=None):
+
+    def find():
+        word = find_ip.get();
+        text_editor.tag_remove('match','1.0',tk.END)
+        matches = 0
+        if word:
+            start_pos = '1.0' 
+            while True:
+                start_pos = text_editor.search(word,start_pos,stopindex=tk.END)
+                if not start_pos:
+                    break
+                end_pos = f'{start_pos}+{len(word)}c'
+                text_editor.tag_add('match',start_pos,end_pos)
+                matches += 1
+                start_pos = end_pos
+                text_editor.tag_config('match',foreground='red',background='yellow')
+        
+
+    def replace():
+        word = find_ip.get();
+        replace_text = replace_ip.get();
+        content = text_editor.get(1.0,tk.END)
+        new_content = content.replace(word, replace_text)
+        text_editor.delete(1.0,tk.END)
+        text_editor.insert(1.0,new_content)
+
+
+    find_dia= tk.Toplevel();
+    find_dia.geometry('450x250+500+200')
+    find_dia.title("Find")
+    find_dia.resizable(0,0)
+
+    ## Frame 
+    find_frame = ttk.LabelFrame(find_dia,text="Find/Replace")
+    find_frame.pack(pady = 20)
+
+    ## labels 
+    text_find_label = ttk.Label(find_frame,text="Find: ")
+    text_replace_label = ttk.Label(find_frame,text="Replace: ")
+
+    ## entry
+    find_ip = ttk.Entry(find_frame,width = 30)
+    replace_ip = ttk.Entry(find_frame,width =30)
+
+    ## Buttons
+    find_btn = ttk.Button(find_frame,text="Find",command=find)
+    replace_btn = ttk.Button(find_frame,text="Replace",command=replace)
+
+    ## label grid
+    text_find_label.grid(row = 0,column=0,padx = 4,pady = 4)
+    text_replace_label.grid(row = 1,column=0,padx = 4,pady = 4)
+
+    ## Entry grind
+    find_ip.grid(row = 0,column = 1,padx = 4,pady = 4)
+    replace_ip.grid(row = 1,column = 1,padx = 4,pady = 4)
+
+    ## buttons grid
+    find_btn.grid(row = 2,column = 0,padx = 8,pady = 4)
+    replace_btn.grid(row = 2,column = 1,padx = 8,pady = 4)
+
+    find_dia.mainloop()
+
+
+
+###### View
+show_toolbar = tk.BooleanVar();
+show_toolbar.set(True)
+show_statusbar = tk.BooleanVar();
+show_statusbar.set(True)
+
+def hide_toolbar():
+    global show_toolbar
+    if show_toolbar:
+        toolbar.pack_forget();
+        show_toolbar = False
+    else:
+        text_editor.pack_forget();
+        status_bar.pack_forget();
+        toolbar.pack(side = tk.TOP,fill = tk.X)
+        text_editor.pack(fill = tk.BOTH,expand = True)
+        status_bar.pack(side = tk.BOTTOM)
+        show_toolbar = True
+
+def hide_statusbar():
+    global show_statusbar
+    if show_statusbar:
+        status_bar.pack_forget();
+        show_statusbar = False
+    else:
+        show_statusbar.pack(side=tk.BOTTOM)
+        show_statusbar = True
+
 
 ## File Commands
 file.add_command(label='New', image = new_icon,compound = tk.LEFT,accelerator = 'Ctrl+n',command=new_file)
@@ -155,14 +249,14 @@ file.add_command(label='Save', image = save_icon,compound = tk.LEFT,accelerator 
 file.add_command(label='Save as', image = saveas_icon,compound = tk.LEFT,accelerator = 'Ctrl+Alt+s',command=save_as)
 file.add_command(label='Exit', image = exit_icon,compound = tk.LEFT,accelerator = 'Ctrl+e',command=exit_func)
 ## Edit Commands
-edit.add_command(label="Copy",image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+c')
-edit.add_command(label="Paste",image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+p')
-edit.add_command(label="Cut",image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+C')
-edit.add_command(label="Clear All",image=clr_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+x')
-edit.add_command(label="Find",image=find_icon,compound=tk.LEFT,accelerator='Ctrl+f')
+edit.add_command(label="Copy",image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+c',command = lambda:text_editor.event_generate("<Control c>"))
+edit.add_command(label="Paste",image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+p',command = lambda:text_editor.event_generate("<Control v>"))
+edit.add_command(label="Cut",image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+C',command = lambda:text_editor.event_generate("<Control x>"))
+edit.add_command(label="Clear All",image=clr_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+x',command = lambda:text_editor.delete(1.0,tk.END))
+edit.add_command(label="Find",image=find_icon,compound=tk.LEFT,accelerator='Ctrl+f',command=find_func)
 ## View Commands
-view.add_checkbutton(label = "Toolbar",image=toolbar_icon,compound=tk.LEFT)
-view.add_checkbutton(label = "Statusbar",image=statusbar_icon,compound=tk.LEFT)
+view.add_checkbutton(label = "Toolbar",onvalue=True,offvalue=False,image=toolbar_icon,compound=tk.LEFT,variable=show_toolbar,command=hide_toolbar)
+view.add_checkbutton(label = "Statusbar",onvalue=True,offvalue=False,image=statusbar_icon,compound=tk.LEFT,variable=show_statusbar,command=hide_statusbar)
 ## Color Theme 
 count = 0
 for i in color_dict:
