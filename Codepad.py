@@ -258,9 +258,15 @@ edit.add_command(label="Find",image=find_icon,compound=tk.LEFT,accelerator='Ctrl
 view.add_checkbutton(label = "Toolbar",onvalue=True,offvalue=False,image=toolbar_icon,compound=tk.LEFT,variable=show_toolbar,command=hide_toolbar)
 view.add_checkbutton(label = "Statusbar",onvalue=True,offvalue=False,image=statusbar_icon,compound=tk.LEFT,variable=show_statusbar,command=hide_statusbar)
 ## Color Theme 
+def change_theme():
+    choosen_theme = theme_choosed.get()
+    color_tuple = color_dict.get(choosen_theme)
+    fg_color,bg_color = color_tuple[0], color_tuple[1]
+    text_editor.config(background= bg_color,fg = fg_color)
+
 count = 0
 for i in color_dict:
-    color.add_radiobutton(label = i,image = color_icons[count],variable = theme_choosed,compound = tk.LEFT)
+    color.add_radiobutton(label = i,image = color_icons[count],variable = theme_choosed,compound = tk.LEFT,command = change_theme)
     count += 1;    
 ######################################################################################################
 #                                                                                                    #            
