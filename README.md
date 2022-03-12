@@ -9,3 +9,4 @@ Nothing more is needed, since _Codepad_ has a limited set of options. At the top
 ## ## 1. Create, open, and save text files with Codepad
 The choices you have in the _File_ menu are _New, Open, Save, Save As, and _Exit_. As you can see, many of these commands have keyboard shortcuts as well. You might already be familiar with some of them since they are the same in nearly every Windows application.
 ![The File menu from Codepad](https://raw.githubusercontent.com/Aditya664/CodePad/master/SS/2.png)
+Creating and saving text documents in  _Codepad_  is simple: open  _Codepad_  , start typing, and then edit and format the text as you see fit. Once you are finished, use the  _Save As_  command to save your work. The default folder is the  _Codepad_  will remember your choice. Keep in mind that your files are saved with a  _.txt_  extension and in plain text.
