@@ -241,6 +241,13 @@ def hide_statusbar():
         show_statusbar.pack(side=tk.BOTTOM)
         show_statusbar = True
 
+## bind 
+main_app.bind("<Control-n>",new_file)
+main_app.bind("<Control-o>",open_file)
+main_app.bind("<Control-s>",save_file)
+main_app.bind("<Control-Alt-s>",save_as)
+main_app.bind("<Control-e>",exit_func)
+
 
 ## File Commands
 file.add_command(label='New', image = new_icon,compound = tk.LEFT,accelerator = 'Ctrl+n',command=new_file)
